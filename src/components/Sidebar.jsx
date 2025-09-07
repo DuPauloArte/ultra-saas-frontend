@@ -3,7 +3,7 @@
 import styled from 'styled-components';
 import {NavLink} from 'react-router-dom';
 import {useAuth} from '../context/AuthContext';
-import {LayoutDashboard, FileText, FolderKanban, LogOut} from 'lucide-react';
+import {LayoutDashboard, FileText, FolderKanban, LogOut, CreditCard} from 'lucide-react';
 
 const SidebarContainer = styled.div `
   width: 250px;
@@ -96,10 +96,7 @@ export const Sidebar = () => {
                     <StyledNavLink to="/" end="end"> <LayoutDashboard size={20} />Dados</StyledNavLink>
                     <StyledNavLink to="/leads"> <FileText size={20} />Leads Form</StyledNavLink>
                     <StyledNavLink to="/projects"> <FolderKanban size={20} />Meus Projetos</StyledNavLink>
-                    <StyledNavLink to="/plans">
-                        <CreditCard size={20} />
-                        Planos e Assinatura
-                    </StyledNavLink>
+                    <StyledNavLink to="/plans"><CreditCard size={20} />Planos e Assinatura</StyledNavLink>
                 </Nav>
             </div>
             <Footer>
