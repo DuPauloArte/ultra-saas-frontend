@@ -13,6 +13,7 @@
     "node": "20.x"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^7.9.0",
     "axios": "^1.7.2",
     "lucide": "^0.542.0",
     "lucide-react": "^0.542.0",

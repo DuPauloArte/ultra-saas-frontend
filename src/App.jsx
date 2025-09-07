@@ -12,6 +12,7 @@ import { LeadsPage } from './pages/LeadsPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ProjectsPage } from './pages/ProjectsPage';
+import { PlansPage } from './pages/PlansPage';
 
 // 1. IMPORTE O COMPONENTE TOOLTIP
 import { Tooltip } from 'react-tooltip';
