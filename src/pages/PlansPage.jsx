@@ -59,7 +59,7 @@ export const PlansPage = () => {
                 <h2>Plano Power</h2>
                 <p>Ideal para começar.</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
-                <PlanButton onClick={() => handleCheckout('price_1P...')}>
+                <PlanButton onClick={() => handleCheckout('price_1S4otg38EcxtIJ87v7Q5iwyP')}>
                     Assinar Agora
                 </PlanButton>
             </PlanCard>
@@ -67,7 +67,7 @@ export const PlansPage = () => {
                 <h2>Plano Turbo</h2>
                 <p>Ideal para Campanhas.</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
-                <PlanButton onClick={() => handleCheckout('price_1P...')}>
+                <PlanButton onClick={() => handleCheckout('price_1S4ouD38EcxtIJ87eaRNGMOW')}>
                     Assinar Agora
                 </PlanButton>
             </PlanCard>
@@ -75,7 +75,7 @@ export const PlansPage = () => {
                 <h2>Plano Ultra</h2>
                 <p>Ideal para Agencias que Gerenciam Varios Clientes</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
-                <PlanButton onClick={() => handleCheckout('price_1P...')}>
+                <PlanButton onClick={() => handleCheckout('price_1S4out38EcxtIJ87KG0DUNcf')}>
                     Assinar Agora
                 </PlanButton>
             </PlanCard>
@@ -83,7 +83,7 @@ export const PlansPage = () => {
                 <h2>Plano Free</h2>
                 <p>Ideal para conhecer.</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
-                <PlanButton onClick={() => handleCheckout('price_1P...')}>
+                <PlanButton onClick={() => handleCheckout('price_1S4ovp38EcxtIJ8776wx3dum')}>
                     Assinar Agora
                 </PlanButton>
             </PlanCard>
