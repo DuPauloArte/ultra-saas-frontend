@@ -131,6 +131,7 @@ const MainLayout = () => {
                         <Route path="/" element={<DashboardPage />} />
                         <Route path="/leads" element={<LeadsPage />} />
                         <Route path="/projects" element={<ProjectsPage />} />
+                        <Route path="/plans" element={<PlansPage />} />
                     </Routes>
                 </PageContent>
                 <Tooltip id="plan-status-tooltip" place="bottom" effect="solid" />
