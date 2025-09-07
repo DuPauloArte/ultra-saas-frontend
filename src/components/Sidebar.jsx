@@ -96,6 +96,10 @@ export const Sidebar = () => {
                     <StyledNavLink to="/" end="end"> <LayoutDashboard size={20} />Dados</StyledNavLink>
                     <StyledNavLink to="/leads"> <FileText size={20} />Leads Form</StyledNavLink>
                     <StyledNavLink to="/projects"> <FolderKanban size={20} />Meus Projetos</StyledNavLink>
+                    <StyledNavLink to="/plans">
+                        <CreditCard size={20} />
+                        Planos e Assinatura
+                    </StyledNavLink>
                 </Nav>
             </div>
             <Footer>
