@@ -120,7 +120,7 @@ const MainLayout = () => {
                         {user && (user.subscriptionStatus === 'inactive' || user.subscriptionStatus === 'canceled') && (
                             <PlanWarningBadge 
                                 data-tooltip-id="plan-status-tooltip"
-                                data-tooltip-content={`O plano "${user.plan}" expirou. Você retornou ao plano Free.`}
+                                data-tooltip-content={`Seu plano expirou. Você retornou ao plano Free.`}
                             />
                         )}
                     </GreetingGroup>

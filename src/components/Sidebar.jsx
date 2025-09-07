@@ -100,7 +100,8 @@ export const Sidebar = () => {
                 </Nav>
             </div>
             <Footer>
-                <p>Versão atual: 0.0.10</p>
+                <p>Modo De Testes</p>
+                <p>Versão: 0.0.10</p>
                 <LogoutButton onClick={auth.logout}> <LogOut size={16} />Logout
                 </LogoutButton>
             </Footer>
