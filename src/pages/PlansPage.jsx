@@ -3,17 +3,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
+import {useAuth} from '../context/AuthContext';
 import {SignalLow, SignalMedium, SignalHigh} from 'lucide-react';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const PlansWrapper = styled.div`
+const PlansWrapper = styled.div `
   padding: 2rem 4rem;
   text-align: center;
 `;
 
-const PlanCard = styled.div`
+const PlanCard = styled.div `
   border: 1px solid #ddd;
   padding: 2rem;
   margin: 1rem;
@@ -21,7 +21,7 @@ const PlanCard = styled.div`
   width: 250px;
 `;
 
-const PlanButton = styled.button`
+const PlanButton = styled.button `
   background-color: #9f20c5;
   color: white;
   border: none;
@@ -36,14 +36,20 @@ const PlanButton = styled.button`
 `;
 
 export const PlansPage = () => {
-    const { token } = useAuth();
+    const {token} = useAuth();
 
     const handleCheckout = async (priceId) => {
         try {
             const response = await axios.post(
                 `${apiUrl}/api/stripe/create-checkout-session`,
-                { priceId },
-                { headers: { 'Authorization': `Bearer ${token}` } }
+                {
+                    priceId
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
             );
             // Redireciona o usuário para a URL de checkout do Stripe
             window.location.href = response.data.url;
@@ -58,15 +64,27 @@ export const PlansPage = () => {
             <h1>Nossos Planos</h1>
             <PlanCard>
                 <h2>Plano Power</h2>
-                <p><SignalLow />Ideal para começar.</p>
+                <p><SignalLow/>Ideal para começar.</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
                 <PlanButton onClick={() => handleCheckout('price_1S4otg38EcxtIJ87v7Q5iwyP')}>
                     Assinar Agora
                 </PlanButton>
             </PlanCard>
             <PlanCard>
+                <div
+                    class="plan-badge"
+                    style="position: absolute;
+                            top: -12px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            background: #b205d6;
+                            color: white;
+                            padding: 6px 16px;
+                            border-radius: 20px;
+                            font-size: 12px;
+                            font-weight: 600;">Mais Popular</div>
                 <h2>Plano Turbo</h2>
-                <p><SignalMedium />Ideal para Campanhas.</p>
+                <p><SignalMedium/>Ideal para Campanhas.</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
                 <PlanButton onClick={() => handleCheckout('price_1S4ouD38EcxtIJ87eaRNGMOW')}>
                     Assinar Agora
@@ -74,7 +92,7 @@ export const PlansPage = () => {
             </PlanCard>
             <PlanCard>
                 <h2>Plano Ultra</h2>
-                <p><SignalHigh />Ideal para Agencias</p>
+                <p><SignalHigh/>Ideal para Agencias</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
                 <PlanButton onClick={() => handleCheckout('price_1S4out38EcxtIJ87KG0DUNcf')}>
                     Assinar Agora
