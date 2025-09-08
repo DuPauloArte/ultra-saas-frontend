@@ -28,7 +28,7 @@ const ChartBox = styled.div`
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   h3 { 
     font-weight: 500; 
-    color: #333; 
+    color: #ccccccff; 
     margin-top: 0;
     margin-bottom: 1.5rem; 
   } 
