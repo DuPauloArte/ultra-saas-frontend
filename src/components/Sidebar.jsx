@@ -47,7 +47,7 @@ const StyledNavLink = styled(NavLink)`
   }
 
   &.active {
-    color: #333;
+    color: #9627a0ff;
     font-weight: 500;
     border-right: 3px solid #9f20c5;
   }

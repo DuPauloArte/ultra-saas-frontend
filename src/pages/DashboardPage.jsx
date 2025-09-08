@@ -22,7 +22,7 @@ const ChartsGrid = styled.div`
 `;
 
 const ChartBox = styled.div` 
-  background-color: #fff;
+  background-color: #252525ff;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
