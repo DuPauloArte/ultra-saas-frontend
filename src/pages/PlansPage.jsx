@@ -35,6 +35,21 @@ const PlanButton = styled.button `
   }
 `;
 
+const PlanBadge = styled.div`
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #b205d6;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+`
+
+
+
 export const PlansPage = () => {
     const {token} = useAuth();
 
@@ -71,18 +86,7 @@ export const PlansPage = () => {
                 </PlanButton>
             </PlanCard>
             <PlanCard>
-                <div
-                    class="plan-badge"
-                    style="position: absolute;
-                            top: -12px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            background: #b205d6;
-                            color: white;
-                            padding: 6px 16px;
-                            border-radius: 20px;
-                            font-size: 12px;
-                            font-weight: 600;">Mais Popular</div>
+                <PlanBadge>Mais Popular</PlanBadge>
                 <h2>Plano Turbo</h2>
                 <p><SignalMedium/>Ideal para Campanhas.</p>
                 {/* Substitua pelo ID do Preço que você copiou do Stripe */}
