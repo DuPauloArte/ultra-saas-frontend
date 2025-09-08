@@ -14,11 +14,13 @@ const PlansWrapper = styled.div `
 `;
 
 const PlanCard = styled.div `
-  border: 1px solid #ddd;
+  border: 1px solid #b785c7ff;
   padding: 2rem;
   margin: 1rem;
   display: inline-block;
   width: 250px;
+  height:20em;
+  border-radius: 20px;
 `;
 
 const PlanButton = styled.button `
@@ -29,23 +31,34 @@ const PlanButton = styled.button `
   cursor: pointer;
   font-size: 1rem;
   border-radius: 5px;
+  margin-top: 65px;
 
   &:hover {
     opacity: 0.9;
   }
 `;
 
+const PlanCardPopular= styled.div `
+    border: 2px solid #9f20c5;
+  padding: 2rem;
+  margin: 1rem;
+  display: inline-block;
+  width: 250px;
+  height:20em;
+  border-radius: 20px;
+`
+
 const PlanBadge = styled.div`
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
     background: #b205d6;
     color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    position: absolute;
+    width:110px;
+    top: 20.5%;
+    left: 53.7%;
+    border-radius:20px;
+`
+const textP = styled.div`
+    background: #000;
 `
 
 
@@ -80,24 +93,21 @@ export const PlansPage = () => {
             <PlanCard>
                 <h2>Plano Power</h2>
                 <p><SignalLow/>Ideal para começar.</p>
-                {/* Substitua pelo ID do Preço que você copiou do Stripe */}
                 <PlanButton onClick={() => handleCheckout('price_1S4otg38EcxtIJ87v7Q5iwyP')}>
                     Assinar Agora
                 </PlanButton>
             </PlanCard>
-            <PlanCard>
+            <PlanCardPopular>
                 <PlanBadge>Mais Popular</PlanBadge>
                 <h2>Plano Turbo</h2>
                 <p><SignalMedium/>Ideal para Campanhas.</p>
-                {/* Substitua pelo ID do Preço que você copiou do Stripe */}
                 <PlanButton onClick={() => handleCheckout('price_1S4ouD38EcxtIJ87eaRNGMOW')}>
                     Assinar Agora
                 </PlanButton>
-            </PlanCard>
+            </PlanCardPopular>
             <PlanCard>
                 <h2>Plano Ultra</h2>
                 <p><SignalHigh/>Ideal para Agencias</p>
-                {/* Substitua pelo ID do Preço que você copiou do Stripe */}
                 <PlanButton onClick={() => handleCheckout('price_1S4out38EcxtIJ87KG0DUNcf')}>
                     Assinar Agora
                 </PlanButton>
