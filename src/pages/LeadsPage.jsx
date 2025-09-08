@@ -103,7 +103,7 @@ const StatusBadge = styled.span`
 const TableRow = styled.tr`
     cursor: pointer;
     &:hover {
-        background-color: #2b2b2bff;
+        background-color: #f5f5f5;
     }
 `;
 

@@ -7,7 +7,7 @@ import {LayoutDashboard, FileText, FolderKanban, LogOut, CreditCard} from 'lucid
 
 const SidebarContainer = styled.div `
   width: 250px;
-  background-color: #292929ff;
+  background-color: #f0f0f0;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@ const StyledNavLink = styled(NavLink)`
   }
 
   &.active {
-    color: #9627a0ff;
+    color: #333;
     font-weight: 500;
     border-right: 3px solid #9f20c5;
   }

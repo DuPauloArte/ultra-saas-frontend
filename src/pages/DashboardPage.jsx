@@ -22,13 +22,13 @@ const ChartsGrid = styled.div`
 `;
 
 const ChartBox = styled.div` 
-  background-color: #252525ff;
+  background-color: #fff;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   h3 { 
     font-weight: 500; 
-    color: #ccccccff; 
+    color: #333; 
     margin-top: 0;
     margin-bottom: 1.5rem; 
   } 

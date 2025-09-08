@@ -10,8 +10,8 @@ export const GlobalStyles = createGlobalStyle`
     font-family: 'Urbanist', sans-serif; /* <-- AQUI ESTÁ A FONTE */
     
     /* Cores base para o seu tema 'clean' */
-    background-color: #181818ff; /* Fundo cinza bem claro */
-    color: #eaeef3ff; /* Texto escuro padrão */
+    background-color: #f8f9faff; /* Fundo cinza bem claro */
+    color: #212529; /* Texto escuro padrão */
   }
 
   *, *:before, *:after {
