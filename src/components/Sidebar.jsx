@@ -7,7 +7,7 @@ import {LayoutDashboard, FileText, FolderKanban, LogOut, CreditCard} from 'lucid
 
 const SidebarContainer = styled.div `
   width: 250px;
-  background-color: #f0f0f0;
+  background-color: #292929ff;
   height: 100vh;
   display: flex;
   flex-direction: column;

@@ -31,8 +31,8 @@ const ContentWrapper = styled.main`
 
 const MainHeader = styled.header`
   padding: 1rem 4rem;
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #fafafa;
+  border-bottom: 1px solid #1f1f1fff;
+  background-color: #181818;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -47,7 +47,7 @@ const GreetingGroup = styled.div`
 const Greeting = styled.span`
   font-size: 1.1rem;
   font-weight: 500;
-  color: #333;
+  color: #c9c9c9ff;
 `;
 
 // Novo componente de Badge para o plano
