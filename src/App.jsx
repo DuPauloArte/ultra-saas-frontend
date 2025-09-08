@@ -1,27 +1,27 @@
 // src/App.jsx
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import styled from 'styled-components';
-import { GlobalStyles } from './styles/GlobalStyles'; // 1. IMPORTE AQUI
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { Sidebar } from './components/Sidebar';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { ProjectSelector } from './components/ProjectSelector';
-import { DashboardPage } from './pages/DashboardPage';
-import { LeadsPage } from './pages/LeadsPage';
-import { LoginPage } from './pages/LoginPage';
-import { RegisterPage } from './pages/RegisterPage';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { PlansPage } from './pages/PlansPage';
+import {GlobalStyles} from './styles/GlobalStyles'; // 1. IMPORTE AQUI
+import {AuthProvider, useAuth} from './context/AuthContext';
+import {Sidebar} from './components/Sidebar';
+import {ProtectedRoute} from './components/ProtectedRoute';
+import {ProjectSelector} from './components/ProjectSelector';
+import {DashboardPage} from './pages/DashboardPage';
+import {LeadsPage} from './pages/LeadsPage';
+import {LoginPage} from './pages/LoginPage';
+import {RegisterPage} from './pages/RegisterPage';
+import {ProjectsPage} from './pages/ProjectsPage';
+import {PlansPage} from './pages/PlansPage';
 
 // 1. IMPORTE O COMPONENTE TOOLTIP
-import { Tooltip } from 'react-tooltip';
+import {Tooltip} from 'react-tooltip';
 
-const AppLayout = styled.div`
+const AppLayout = styled.div `
   display: flex;
 `;
 
-const ContentWrapper = styled.main`
+const ContentWrapper = styled.main `
   flex-grow: 1;
   margin-left: 250px;
   width: calc(100% - 250px);
@@ -29,7 +29,7 @@ const ContentWrapper = styled.main`
   flex-direction: column;
 `;
 
-const MainHeader = styled.header`
+const MainHeader = styled.header `
   padding: 1rem 4rem;
   border-bottom: 1px solid #e0e0e0;
   background-color: #fafafa;
@@ -38,20 +38,20 @@ const MainHeader = styled.header`
   align-items: center;
 `;
 
-const GreetingGroup = styled.div`
+const GreetingGroup = styled.div `
   display: flex;
   align-items: center;
   gap: 1rem;
 `;
 
-const Greeting = styled.span`
+const Greeting = styled.span `
   font-size: 1.1rem;
   font-weight: 500;
   color: #333;
 `;
 
 // Novo componente de Badge para o plano
-const PlanBadge = styled.span`
+const PlanBadge = styled.span `
   padding: 0.25rem 0.75rem;
   border-radius: 9999px; /* Formato de pílula */
   font-size: 0.8rem;
@@ -60,7 +60,8 @@ const PlanBadge = styled.span`
   color: white;
   
   /* Lógica para definir a cor com base no plano */
-  background-color: ${({ plan }) => {
+  background-color: ${ ({
+    plan}) => {
     switch (plan) {
       case 'Power': return '#1d20ddff'; // Azul
       case 'Turbo': return '#16a34a'; // Verde
@@ -72,8 +73,8 @@ const PlanBadge = styled.span`
   }};
 `;
 
-// 2. NOVO: COMPONENTE PARA O CÍRCULO VERMELHO DE AVISO
-const PlanWarningBadge = styled.span`
+    // 2. NOVO: COMPONENTE PARA O CÍRCULO VERMELHO DE AVISO
+    const PlanWarningBadge = styled.span `
   width: 12px;
   height: 12px;
   background-color: #ef4444; /* Vermelho */
@@ -87,78 +88,95 @@ const PlanWarningBadge = styled.span`
   }
 `;
 
-const PageContent = styled.div`
+    const PageContent = styled.div `
   flex-grow: 1;
   overflow-y: auto;
 `;
 
-// Componente interno para renderizar o layout principal
-const MainLayout = () => {
-    const { user } = useAuth();
+    // NOVO: Componente para agrupar o badge do plano e o aviso
+    const PlanStatusWrapper = styled.div `
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* 8px de espaço entre o badge e o círculo */
+`;
 
-    const getGreeting = () => {
-        const hour = new Date().getHours();
-        if (hour < 12) return "Bom dia";
-        if (hour < 18) return "Boa tarde";
-        return "Boa noite";
-    };
+    // Componente interno para renderizar o layout principal
+    const MainLayout = () => {
+        const {user} = useAuth();
 
-    return (
-        <AppLayout>
-          <GlobalStyles />
-            <Sidebar />
-            <ContentWrapper>
-                <MainHeader>
-                    <GreetingGroup>
-                        <Greeting>
-                            {user && `${getGreeting()}, ${user.name}!`}
-                        </Greeting>
-                        {/* 3. LÓGICA ATUALIZADA PARA MOSTRAR BADGE OU AVISO */}
-                        {user && user.subscriptionStatus === 'active' && (
-                            <PlanBadge plan={user.plan}>{user.plan}</PlanBadge>
-                        )}
-                        {user && (user.subscriptionStatus === 'inactive' || user.subscriptionStatus === 'canceled') && (
-                            <PlanWarningBadge 
-                                data-tooltip-id="plan-status-tooltip"
-                                data-tooltip-content={`Seu plano expirou. Você retornou ao plano Free.`}
-                            />
-                        )}
-                    </GreetingGroup>
-                    <ProjectSelector />
-                </MainHeader>
-                <PageContent>
+        const getGreeting = () => {
+            const hour = new Date().getHours();
+            if (hour < 12) 
+                return "Bom dia";
+            if (hour < 18) 
+                return "Boa tarde";
+            return "Boa noite";
+        };
+
+        return (
+            <AppLayout>
+                <GlobalStyles/>
+                <Sidebar/>
+                <ContentWrapper>
+                    <MainHeader>
+                        <GreetingGroup>
+                            <Greeting>
+                                {user && `${getGreeting()}, ${user.name}!`}
+                            </Greeting>
+
+                            {/* Lógica atualizada para mostrar o badge e o aviso juntos */}
+                            {
+                                user && (
+                                    <PlanStatusWrapper>
+                                        <PlanBadge plan={user.plan}>{user.plan}</PlanBadge>
+
+                                        {/* O círculo vermelho só aparece se a assinatura não estiver ativa */}
+                                        {
+                                            (
+                                                user.subscriptionStatus === 'inactive' || user.subscriptionStatus === 'canceled'
+                                            ) && (
+                                                <PlanWarningBadge
+                                                    data-tooltip-id="plan-status-tooltip"
+                                                    data-tooltip-content="Sua assinatura anterior expirou. Você está no plano Free."/>
+                                            )
+                                        }
+                                    </PlanStatusWrapper>
+                                )
+                            }
+                        </GreetingGroup>
+                        <ProjectSelector/>
+                    </MainHeader>
+                    <PageContent>
+                        <Routes>
+                            <Route path="/" element={<DashboardPage />}/>
+                            <Route path="/leads" element={<LeadsPage />}/>
+                            <Route path="/projects" element={<ProjectsPage />}/>
+                            <Route path="/plans" element={<PlansPage />}/>
+                        </Routes>
+                    </PageContent>
+                    <Tooltip id="plan-status-tooltip" place="bottom" effect="solid"/>
+                </ContentWrapper>
+            </AppLayout>
+        );
+    }
+
+    function App() {
+        return (
+            <AuthProvider>
+                <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<DashboardPage />} />
-                        <Route path="/leads" element={<LeadsPage />} />
-                        <Route path="/projects" element={<ProjectsPage />} />
-                        <Route path="/plans" element={<PlansPage />} />
+                        <Route path="/login" element={<LoginPage />}/>
+                        <Route path="/register" element={<RegisterPage />}/>
+                        <Route
+                            path="/*"
+                            element={<ProtectedRoute > <MainLayout/>
+                        </ProtectedRoute>
+                            }
+                        />
                     </Routes>
-                </PageContent>
-                <Tooltip id="plan-status-tooltip" place="bottom" effect="solid" />
-            </ContentWrapper>
-        </AppLayout>
-    );
-}
+                </BrowserRouter>
+            </AuthProvider>
+        );
+    }
 
-function App() {
-  return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route
-            path="/*"
-            element={
-              <ProtectedRoute>
-                <MainLayout />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
-  );
-}
-
-export default App;
+    export default App;
