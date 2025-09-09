@@ -93,6 +93,10 @@ const PlanBadge = styled.span `
   overflow-y: auto;
 `;
 
+const DueWarning = styled.div `
+  color: red;
+` 
+
     // NOVO: Componente para agrupar o badge do plano e o aviso
     const PlanStatusWrapper = styled.div `
   display: flex;
@@ -144,6 +148,11 @@ const PlanBadge = styled.span `
                                 )
                             }
                         </GreetingGroup>
+                        {user && user.subscriptionStatus === 'inactive' && (
+    <DueWarning className="payment-failed-banner">
+        Seu último pagamento falhou. Por favor, <a href="/plans">atualize seus dados de pagamento</a> para manter o acesso.
+    </DueWarning>
+)}
                         <ProjectSelector/>
                     </MainHeader>
                     <PageContent>

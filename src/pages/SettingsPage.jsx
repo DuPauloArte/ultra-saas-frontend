@@ -1,11 +1,12 @@
-// src/pages/SettingsPage.jsx
-
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
-// --- ESTILOS (sem alterações) ---
+const apiUrl = import.meta.env.VITE_API_URL;
+
+// --- ESTILOS ---
 const SettingsWrapper = styled.div`
   padding: 2rem 4rem;
   font-family: 'Poppins', sans-serif;
@@ -24,7 +25,7 @@ const Subheader = styled.p`
   margin-bottom: 2.5rem;
 `;
 
-const InstructionBox = styled.div`
+const Box = styled.div`
   background-color: #ffffff;
   border-radius: 8px;
   padding: 2rem;
@@ -72,45 +73,65 @@ const CopyButton = styled.button`
   }
 `;
 
-const LoadingMessage = styled.div` font-size: 1.5rem; color: #888; text-align: center; margin-top: 5rem; `;
+const LoadingMessage = styled.div`
+    font-size: 1.5rem;
+    color: #888;
+    text-align: center;
+    margin-top: 5rem;
+`;
 
-// --- COMPONENTE ---
+const ProjectSelector = styled.select`
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 1.5rem;
+  background-color: white;
+`;
+
+// --- COMPONENTE COMPLETO ---
 export const SettingsPage = () => {
-    const [userData, setUserData] = useState(null);
+    const { token, projects, setProjects } = useAuth(); 
+    const [selectedProjectId, setSelectedProjectId] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const [scriptText, setScriptText] = useState('');
     const [copySuccess, setCopySuccess] = useState('');
-    const { token } = useAuth();
 
     useEffect(() => {
-        if (token) {
-            const fetchUserData = async () => {
+        if (token && projects.length === 0) {
+            setIsLoading(true);
+            const fetchProjects = async () => {
                 try {
-                    const response = await axios.get('http://localhost:3001/api/users/me', {
+                    const response = await axios.get(`${apiUrl}/api/projects`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
-                    setUserData(response.data);
+                    setProjects(response.data);
                 } catch (error) {
-                    console.error("Erro ao buscar dados do usuário:", error);
+                    console.error("Erro ao buscar projetos:", error);
+                } finally {
+                    setIsLoading(false);
                 }
             };
-            fetchUserData();
+            fetchProjects();
+        } else {
+            setIsLoading(false);
         }
-    }, [token]);
+    }, [token, projects.length, setProjects]);
+
+    useEffect(() => {
+        if (projects.length > 0 && !selectedProjectId) {
+            setSelectedProjectId(projects[0]._id);
+        }
+    }, [projects, selectedProjectId]);
     
     useEffect(() => {
-        if (userData) {
-            // MELHORIA: O script agora está no formato completo para facilitar a leitura
+        if (selectedProjectId) {
             const fullScript = `<script>
 (function() {
     const config = {
-        // Seu ID de site exclusivo
-        siteId: '${userData.siteId}',
-
-        // O endereço da nossa API para receber os leads
-        apiEndpoint: 'http://localhost:3001/api/capture',
-
-        // O seletor CSS do formulário que você quer monitorar no seu site
-        // Ex: '#formulario-contato', '.form-principal', 'form[name="contact"]'
+        projectId: '${selectedProjectId}',
+        apiEndpoint: 'https://ultra-saas-api.onrender.com/api/capture',
         formSelector: '#form-contato'
     };
 
@@ -123,9 +144,31 @@ export const SettingsPage = () => {
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
+            const data = {};
+            const mappingConfig = {
+                nome: ['nome', 'name', 'fullname', 'your-name'],
+                email: ['email', 'mail', 'e-mail'],
+                telefone: ['tel', 'phone', 'celular', 'whatsapp', 'fone'],
+                cidade: ['city', 'cidade', 'localidade']
+            };
+
+            function getFieldType(element) {
+                const name = element.name.toLowerCase();
+                for (const type in mappingConfig) {
+                    if (mappingConfig[type].includes(name)) {
+                        return type;
+                    }
+                }
+                return name;
+            }
+
+            for (let [key, value] of formData.entries()) {
+                const fieldType = getFieldType({ name: key });
+                data[fieldType] = value;
+            }
+
             try {
-                const response = await fetch(\`\${config.apiEndpoint}/\${config.siteId}\`, {
+                const response = await fetch(\`\${config.apiEndpoint}/\${config.projectId}\`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
@@ -147,7 +190,7 @@ ${'</' + 'script>'}
 `;
             setScriptText(fullScript);
         }
-    }, [userData]);
+    }, [selectedProjectId]);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(scriptText).then(() => {
@@ -159,7 +202,7 @@ ${'</' + 'script>'}
         });
     };
 
-    if (!userData) {
+    if (isLoading) {
         return <LoadingMessage>Carregando configurações...</LoadingMessage>;
     }
 
@@ -168,25 +211,47 @@ ${'</' + 'script>'}
             <Header>Instalação do Script</Header>
             <Subheader>Siga os passos abaixo para começar a capturar leads do seu site.</Subheader>
 
-            <InstructionBox>
-                <InstructionStep>
-                    <strong>Passo 1:</strong> Copie o bloco de código abaixo. Ele já está configurado com o seu ID de site exclusivo: <strong>{userData.siteId}</strong>.
-                </InstructionStep>
-                <CodeBlock>
-                    <code>
-                        {scriptText}
-                    </code>
-                </CodeBlock>
-                <CopyButton onClick={handleCopy}>
-                    {copySuccess || 'Copiar Script'}
-                </CopyButton>
-            </InstructionBox>
+            {projects.length > 0 ? (
+                <Box>
+                    <InstructionStep>
+                        <strong>Passo 1:</strong> Selecione o projeto para o qual deseja gerar o script.
+                    </InstructionStep>
+                    <ProjectSelector 
+                        value={selectedProjectId} 
+                        onChange={(e) => setSelectedProjectId(e.target.value)}
+                    >
+                        {projects.map(project => (
+                            <option key={project._id} value={project._id}>
+                                {project.name}
+                            </option>
+                        ))}
+                    </ProjectSelector>
 
-            <InstructionBox>
-                <InstructionStep><strong>Passo 2:</strong> Cole o script no código HTML do seu site. O melhor lugar é logo antes do fechamento da tag {'<body>'}.</InstructionStep>
-                <InstructionStep><strong>Passo 3:</strong> Certifique-se de que o formulário que você deseja monitorar no seu site tem o seletor CSS correto. Por padrão, o script procura por `id="form-contato"`. Se o seu formulário for diferente, altere a linha "formSelector" no script.
-                </InstructionStep>
-            </InstructionBox>
+                    <InstructionStep>
+                        <strong>Passo 2:</strong> Copie o bloco de código abaixo. Ele já está configurado com o ID do seu projeto.
+                    </InstructionStep>
+                    <CodeBlock>
+                        <code>{scriptText}</code>
+                    </CodeBlock>
+                    <CopyButton onClick={handleCopy}>
+                        {copySuccess || 'Copiar Script'}
+                    </CopyButton>
+                </Box>
+            ) : (
+                <Box>
+                    <InstructionStep>
+                        Você ainda não tem nenhum projeto. Crie um projeto primeiro para poder gerar o script de captura.
+                    </InstructionStep>
+                    <Link to="/projects">
+                        <CopyButton as="span">Ir para Projetos</CopyButton>
+                    </Link>
+                </Box>
+            )}
+
+            <Box>
+                <InstructionStep><strong>Passo 3:</strong> Cole o script no código HTML do seu site. O melhor lugar é logo antes do fechamento da tag {'<body>'}.</InstructionStep>
+                <InstructionStep><strong>Passo 4:</strong> Certifique-se de que o formulário no seu site tem o seletor `id="form-contato"`. Se for diferente, altere a linha `formSelector` no script.</InstructionStep>
+            </Box>
         </SettingsWrapper>
     );
 };

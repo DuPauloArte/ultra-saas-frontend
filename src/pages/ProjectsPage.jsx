@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { ProjectEditModal } from '../components/ProjectEditModal';
+import { ProjectEditModal } from '../components/ProjectEditModal'; // Assumindo que você tem este componente
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -72,18 +72,6 @@ const ProjectName = styled.h3`
   color: #9f20c5;
 `;
 
-const CodeBlock = styled.pre`
-  background-color: #2d2d2d;
-  color: #f8f8f2;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.9rem;
-`;
-
 const ActionButton = styled.button`
   padding: 0.6rem 1.2rem;
   border-radius: 6px;
@@ -103,6 +91,18 @@ const RenameButton = styled(ActionButton)`
   background-color: #6c757d;
   color: white;
   &:hover { background-color: #5a6268; }
+`;
+
+const CodeBlock = styled.pre`
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
 `;
 
 const Form = styled.form`
@@ -130,13 +130,13 @@ const Button = styled.button`
   &:hover { background-color: #7c199a; }
 `;
 
-// --- COMPONENTE ---
+// --- COMPONENTE FINAL E UNIFICADO ---
 export const ProjectsPage = () => {
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [projectToEdit, setProjectToEdit] = useState(null);
     const { token, projects, setProjects } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [newProjectName, setNewProjectName] = useState('');
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [projectToEdit, setProjectToEdit] = useState(null);
     const [copySuccessId, setCopySuccessId] = useState(null);
 
     useEffect(() => {
@@ -169,12 +169,111 @@ export const ProjectsPage = () => {
         } catch (error) { console.error("Erro ao criar projeto:", error); }
     };
 
-    const generateScriptForProject = (projectId) => {
-        const apiEndpointForScript = apiUrl || 'http://localhost:3001';
-        const scriptLogic = `(function(){const config={siteId:'${projectId}',apiEndpoint:'${apiEndpointForScript}/api/capture',formSelector:'#form-contato'},mappingConfig={nome:['nome','name','fullname','your-name'],email:['email','mail','e-mail'],telefone:['tel','phone','celular','whatsapp','fone'],mensagem:['msg','message','mensagem','comments','comentarios']};function getFieldType(e){if("email"===e.type)return"email";if("tel"===e.type)return"telefone";const t=[e.name,e.id,e.placeholder].filter(Boolean).join(" ").toLowerCase();if(!t)return e.name||"campo_desconhecido";for(const o in mappingConfig)for(const a of mappingConfig[o])if(t.includes(a))return o;return e.name||"campo_desconhecido"}document.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(config.formSelector);e?e.addEventListener("submit",async t=>{t.preventDefault();const o={};Array.from(e.elements).forEach(e=>{if("submit"===e.type||"button"===e.type||!e.value)return;const t=getFieldType(e);t&&!o[t]&&(o[t]=e.value)});try{const a=await fetch(config.apiEndpoint+"/"+config.siteId,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});a.ok?(alert("Obrigado! Seus dados foram enviados."),e.reset()):alert("[Ultra Digital] Erro ao enviar o lead. Verifique o console (F12).")}catch(n){alert("[Ultra Digital] Erro de rede. Verifique o console (F12).")}}):console.warn('[Ultra Digital] Formulário com seletor "'+config.formSelector+'" não encontrado.')})})();`;
-        
-        return `\n<script>${scriptLogic}</script>\n`;
+    // SUBSTITUA A FUNÇÃO ANTIGA POR ESTA VERSÃO FINAL E MAIS INTELIGENTE
+const generateScriptForProject = (projectId) => {
+    const fullScript = `<script>
+(function() {
+    const config = {
+        projectId: '${projectId}',
+        apiEndpoint: 'https://ultra-saas-api.onrender.com/api/capture',
+        formSelector: '#form-contato'
     };
+
+    const mappingConfig = {
+        nome: [
+    'name', 'nome', 'full name', 'full_name', 'nome completo', 
+    'nome_completo', 'your name', 'seu nome'
+],
+
+telefone: [
+    'phone', 'telefone', 'telefone celular', 'celular', 'mobile', 
+    'mobile phone', 'cell phone', 'telefone fixo', 'contact', 
+    'contact number', 'número de telefone', 'numero de telefone', 
+    'telefone_contato', 'telefone de contato', 'fone', 'tel', 'telefone1',
+    'phone_number', 'your phone', 'seu telefone','numeric_field'
+],
+
+email: [
+    'email', 'e-mail', 'e_mail', 'mail', 'email address', 
+    'endereço de email', 'endereco de email', 'seu email', 'your email'
+],
+
+cidade: [
+    'city', 'cidade', 'town', 'localidade', 'sua cidade', 'your city', 
+    'city_name', 'nome da cidade', 'cidade_residencia'
+]
+    };
+
+    function getFieldType(elementName) {
+        const lowerName = elementName.toLowerCase();
+        for (const type in mappingConfig) {
+            for (const keyword of mappingConfig[type]) {
+                if (lowerName.includes(keyword)) {
+                    return type;
+                }
+            }
+        }
+        return null; // Retorna nulo se não for um campo mapeado
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector(config.formSelector);
+        if (!form) { return; }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const mappedData = {};
+            const unmappedFields = [];
+
+            for (let [key, value] of formData.entries()) {
+                if (!value || key.startsWith('_')) { // Ignora campos vazios ou internos
+                    continue;
+                }
+
+                const fieldType = getFieldType(key);
+
+                if (fieldType) { // Se o campo for mapeado (nome, email, etc.)
+                    if (!mappedData[fieldType]) {
+                        mappedData[fieldType] = value;
+                    }
+                } else { // Se não for mapeado, adiciona aos comentários
+                    unmappedFields.push(\`\${key}: \${value}\`);
+                }
+            }
+            
+            // Junta os campos não mapeados em um único texto para os comentários
+            if (unmappedFields.length > 0) {
+                mappedData.comentarios = unmappedFields.join('\\n');
+            }
+            
+            if (!mappedData.email) {
+                console.error('[Ultra Digital] O campo de email obrigatório não foi capturado.');
+                return;
+            }
+
+            try {
+                const response = await fetch(\`\${config.apiEndpoint}/\${config.projectId}\`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(mappedData),
+                });
+                if (response.ok) {
+                    alert('Obrigado! Seus dados foram enviados.');
+                    form.reset();
+                } else {
+                    console.error('[Ultra Digital] Erro ao enviar o lead.');
+                }
+            } catch (error) {
+                console.error('[Ultra Digital] Erro de rede:', error);
+            }
+        });
+    });
+})();
+${'</' + 'script>'}
+`;
+    return fullScript;
+};
     
     const handleCopy = (scriptText, projectId) => {
         navigator.clipboard.writeText(scriptText).then(() => {
@@ -195,15 +294,14 @@ export const ProjectsPage = () => {
 
     const handleRenameSuccess = (updatedProject) => {
         setProjects(currentProjects => 
-            // CORREÇÃO: Comparando com _id para garantir consistência
             currentProjects.map(p => (p._id === updatedProject._id ? updatedProject : p))
         );
     };
 
     return (
         <ProjectsWrapper>
-            <Header>Gerenciamento de Projetos</Header>
-            <Subheader>Crie e gerencie os projetos para vincular aos seus sites.</Subheader>
+            <Header>Meus Projetos</Header>
+            <Subheader>Crie projetos para seus sites e obtenha o script de instalação.</Subheader>
 
             <Section>
                 <SectionTitle>Criar Novo Projeto</SectionTitle>
@@ -219,7 +317,7 @@ export const ProjectsPage = () => {
             </Section>
 
             <Section>
-                <SectionTitle>Scripts de Instalação</SectionTitle>
+                <SectionTitle>Projetos e Scripts</SectionTitle>
                 {isLoading ? (
                     <p>Carregando projetos...</p>
                 ) : (

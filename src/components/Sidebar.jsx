@@ -94,14 +94,14 @@ export const Sidebar = () => {
                 <Nav>
                     {/* CORREÇÃO 2: Propriedade 'end' ajustada */}
                     <StyledNavLink to="/" end="end"> <LayoutDashboard size={20} />Dados</StyledNavLink>
-                    <StyledNavLink to="/leads"> <FileText size={20} />Leads Form</StyledNavLink>
+                    <StyledNavLink to="/leads"> <FileText size={20} />Leads</StyledNavLink>
                     <StyledNavLink to="/projects"> <FolderKanban size={20} />Meus Projetos</StyledNavLink>
                     <StyledNavLink to="/plans"><CreditCard size={20} />Planos e Assinatura</StyledNavLink>
                 </Nav>
             </div>
             <Footer>
                 <p>Modo De Testes</p>
-                <p>Versão: 0.0.10</p>
+                <p>Versão: 0.1.1</p>
                 <LogoutButton onClick={auth.logout}> <LogOut size={16} />Logout
                 </LogoutButton>
             </Footer>
